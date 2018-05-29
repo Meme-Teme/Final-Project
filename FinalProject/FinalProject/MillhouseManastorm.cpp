@@ -1531,4 +1531,4 @@ int main()
 
 //Hey, Author's note:
 //It works. Unlike some other peoples >.> 
-// ¯\_(ツ)_/¯
+// ¯\_(ツ)_/¯-
