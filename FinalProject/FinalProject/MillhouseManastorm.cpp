@@ -28,7 +28,41 @@ int characterHP = 12; //This is the adventurer's starting hit points (Health)
 int heal; //This is the health value gained through the use of a healing spell
 int spellAttackRoll; //This is the rating of an attack, if it is greater than the armor class, it hits)
 int millhouseArmorClass = 10;
+int guardspeed = 30;
+int guardhitDice = 10;
+int guardAC = 16 + 2;
+int guardproficiency = 2;
 
+int guardStrScore = 15;
+int guardStrMod = 2;
+int guardStrSave = guardStrMod;
+
+int guardDexScore = 12;
+int guardDexMod = 1;
+int guardDexSave = guardDexMod;
+
+
+
+
+int guardConScore = 14;
+int guardConMod = 2;
+int guardConSave = guardConMod;
+int guardhealth = 10 + guardConMod;
+int guardinitiative = guardDexMod;
+int guardIntScore = 11;
+int guardIntMod = 0;
+int guardIntSave = guardIntMod;
+
+int guardWisScore = 8;
+int guardWisMod = -1;
+int guardWisSave = guardWisMod + guardproficiency;
+
+int guardChaScore = 15;
+int guardChaMod = 2;
+int guardChaSave = guardChaMod + guardproficiency;
+
+int guardattackMod = guardStrMod + guardproficiency;
+int guarddamageMod = guardStrMod;
 string randomSpell[] = { "Firebolt", "Ray of Frost", "Acid Splash", "Chill Touch", "Poison Spray", "Shocking Grasp", "Burning Hands", "Magic Missile", "Thunderwave" };
 //These are the damaging spells that Milhouse Manastorm can use.
 
@@ -708,6 +742,29 @@ int characterSelection()
 	system("Pause");
 	return(0);
 }
+void displayStats()
+{
+	cout << "Your stats are: \n";
+	cout << "Health: " << health << endl;
+	cout << "Speed: " << speed << endl;
+	cout << "Hit Dice: " << hitDice << endl;
+	cout << "Armor Class: " << armorClass << endl;
+	cout << "Proficiency: " << proficiency << endl;
+	cout << "Strength: " << StrScore << endl;
+	cout << "Strength Mod: " << StrMod << endl;
+	cout << "Dexterity: " << DexScore << endl;
+	cout << "Dexterity Mod: " << DexMod << endl;
+	cout << "Constitution: " << ConScore << endl;
+	cout << "Constitution Mod: " << ConMod << endl;
+	cout << "Constitution: " << ConScore << endl;
+	cout << "Constitution Mod: " << ConMod << endl;
+	cout << "Intelligence:" << IntScore << endl;
+	cout << "Intelligence Mod: " << IntMod << endl;
+	cout << "Wisdom: " << WisScore << endl;
+	cout << "Wisdom Mod: " << WisMod << endl;
+	cout << "Charisma: " << ChaScore << endl;
+	cout << "Charisma Mod: " << ChaMod << endl;
+}
 int roll(int x, int y) //Rolls the damage values of a spell
 {
 	/*
@@ -726,7 +783,7 @@ int roll(int x, int y) //Rolls the damage values of a spell
 		srand(GetTickCount()); //Set RNG seed
 		damage = damage + rand() % x + 1; //Add another dice roll's rating to the earlier damage value
 	}
-	cout << "You rolled a " << damage << ". \n";
+
 	return 0; // Function conclusion
 }
 int attack()
@@ -743,11 +800,7 @@ int attack()
 	cout << "What would you like to attack with? " << equipment[1] << ", or " << equipment[2] << endl;
 	cin >> userInputString;
 	cout << "You rolled a " << attackHit << " for attempting to strike millhouse \n";
-	if (attackHit < millhouseArmorClass)
-	{
-		cout << "You miss!" << endl;
-	 	goto Miss;
-	}
+	
 	if(userInputString == equipment[1])
 		roll(weaponDice[1], 1);
 	else if(userInputString == equipment[2])
@@ -757,7 +810,10 @@ int attack()
 	cout << "Please type it exactly." << endl;
 	goto equipmentTypo;
 	}
-Miss:
+	if (attackHit < millhouseArmorClass)
+	{
+		damage = 0;
+	}
 	return 0;
 }
 
@@ -977,23 +1033,35 @@ int SpellsCharacter()
 	MessUpSpell:
 	
 	cin >> userSpell;
+	for (auto&c : userSpell) c = toupper(c);
 
-
-	if (userSpell == "Acid-Splash")
+	if (userSpell == "ACID-SPLASH")
 	{
 		acCheck();
 		if (spellAttackRoll > millhouseArmorClass)
-			roll(6, 1);
+			roll(6, 1); 
+		if (damage == 0)
+			cout << "You missed! \n";
+			else
+			{
+				cout << "You rolled a " << damage << " damage. \n";
+			}
 	}
 
-	else if (userSpell == "Chill-touch")
+	else if (userSpell == "CHILL-TOUCH")
 	{
 		acCheck();
 		if (spellAttackRoll > millhouseArmorClass)
 			roll(8, 1);
+		if (damage == 0)
+			cout << "You missed! \n";
+		else
+			{
+				cout << "You rolled a " << damage << " damage. \n";
+			}
 	}
 	
-	else if (userSpell == "Cure-Wounds")
+	else if (userSpell == "CURE-WOUNDS")
 	{
 		acCheck();
 		if (spellAttackRoll > millhouseArmorClass)
@@ -1001,112 +1069,188 @@ int SpellsCharacter()
 		heal = heal + spellAttack;
 		characterHP = characterHP + heal;
 	}
-	else if (userSpell == "Eldritch-Blast")
+	else if (userSpell == "ELDRITCH-BLAST")
 	{
 		acCheck();
 		if (spellAttackRoll > millhouseArmorClass)
-			roll(10, 1);
+			roll(10, 1); if (damage == 0)
+			cout << "You missed! \n";
+			else
+			{
+				cout << "You rolled a " << damage << " damage. \n";
+			}
 	}
 	
-	else if (userSpell == "Firebolt")
+	else if (userSpell == "FIREBOLT")
 	{
 		acCheck();
 		if (spellAttackRoll > millhouseArmorClass)
-			roll(10, 1);
+			roll(10, 1); if (damage == 0)
+			cout << "You missed! \n";
+			else
+			{
+				cout << "You rolled a " << damage << " damage. \n";
+			}
 	}
-	else if (userSpell == "Hail-of-Thorns")
+	else if (userSpell == "HAIL-OF-THORNS")
 	{
 		acCheck();
 		if (spellAttackRoll > millhouseArmorClass)
-			roll(10, 1);
+			roll(10, 1); if (damage == 0)
+			cout << "You missed! \n";
+			else
+			{
+				cout << "You rolled a " << damage << " damage. \n";
+			}
 	}
-	else if (userSpell == "Poison-Spray")
+	else if (userSpell == "POISON-SPRAY")
 	{
 		acCheck();
 		if (spellAttackRoll > millhouseArmorClass)
-			roll(12, 1);
+			roll(12, 1); if (damage == 0)
+			cout << "You missed! \n";
+			else
+			{
+				cout << "You rolled a " << damage << " damage. \n";
+			}
 	}
-	else if (userSpell == "Prestidigitation")
+	else if (userSpell == "PRESTIDIGITATION")
 	{
 		cout << "You make a circle on the ground. Woo You. Great Job.";
 		cout << "Sparks come out your hands for 10 minutes.";
 	}
-	else if (userSpell == "Produce-Flame")
+	else if (userSpell == "PRODUCE-FLAME")
 	{
 		acCheck();
 		if (spellAttackRoll > millhouseArmorClass)
-			roll(8, 1);
+			roll(8, 1); if (damage == 0)
+			cout << "You missed! \n";
+			else
+			{
+				cout << "You rolled a " << damage << " damage. \n";
+			}
 	}
-	else if (userSpell == "Ray-of-Frost")
+	else if (userSpell == "RAY-OF-FROST")
 	{
 		acCheck();
 		if (spellAttackRoll > millhouseArmorClass)
-			roll(8, 1);
+			roll(8, 1); if (damage == 0)
+			cout << "You missed! \n";
+			else
+			{
+				cout << "You rolled a " << damage << " damage. \n";
+			}
 	}
-	else if (userSpell == "Sacred-Flame")
+	else if (userSpell == "SACRED-FLAME")
 	{
 		saveThrow(spellDC, DexMod);
 		if (spellAttackRoll > millhouseArmorClass)
-			roll(6, 1);
+			roll(6, 1); if (damage == 0)
+			cout << "You missed! \n";
+			else
+			{
+				cout << "You rolled a " << damage << " damage. \n";
+			}
 	}
-	else if (userSpell == "Spare-the-Dying")
+	else if (userSpell == "SPARE-THE-DYING")
 	{
 			healingRoll(8, 1);
 		characterHP = characterHP + heal;
 	}
-	else if (userSpell == "Shillelagh")
+	else if (userSpell == "SHILLELAGH")
 	{
 		acCheck();
 		if (spellAttackRoll > millhouseArmorClass)
-			roll(8, 1);
+			roll(8, 1); if (damage == 0)
+			cout << "You missed! \n";
+			else
+			{
+				cout << "You rolled a " << damage << " damage. \n";
+			}
 	}
-	else if (userSpell == "Shocking-Grasp")
+	else if (userSpell == "SHOCKING-GRASP")
 	{
 		acCheck();
 		if (spellAttackRoll > millhouseArmorClass)
-			roll(8, 1);
+			roll(8, 1); if (damage == 0)
+			cout << "You missed! \n";
+			else
+			{
+				cout << "You rolled a " << damage << " damage. \n";
+			}
 	}
-	else if (userSpell == "Shield-of-Faith")
+	else if (userSpell == "SHIELD-OF-FAITH")
 	{
 		armorClass = armorClass + 2;
 	}
-	else if (userSpell == "Thorn-Whip")
+	else if (userSpell == "THORN-WHIP")
 	{
 		acCheck();
 		if (spellAttackRoll > millhouseArmorClass)
-			roll(6, 1);
+			roll(6, 1); if (damage == 0)
+			cout << "You missed! \n";
+			else
+			{
+				cout << "You rolled a " << damage << " damage. \n";
+			}
 	}
-	else if (userSpell == "Thunderous-Smite")
+	else if (userSpell == "THUNDEROUS-SMITE")
 	{
 		acCheck();
 		if (spellAttackRoll > millhouseArmorClass)
-			roll(6, 2);
+			roll(6, 2); if (damage == 0)
+			cout << "You missed! \n";
+			else
+			{
+				cout << "You rolled a " << damage << " damage. \n";
+			}
 	}
-	else if (userSpell == "Wrathful-Smite")
+	else if (userSpell == "WRATHFUL-SMITE")
 	{
 		acCheck();
 		if (spellAttackRoll > millhouseArmorClass)
-			roll(6, 1);
+			roll(6, 1); if (damage == 0)
+			cout << "You missed! \n";
+			else
+			{
+				cout << "You rolled a " << damage << " damage. \n";
+			}
 	}
-	else if (userSpell == "Vicious-Mockery")
+	else if (userSpell == "VICIOUS-MOCKERY")
 	{
 		acCheck();
 		if (spellAttackRoll > millhouseArmorClass)
-			roll(4, 1);
+			roll(4, 1); if (damage == 0)
+			cout << "You missed! \n";
+			else
+			{
+				cout << "You rolled a " << damage << " damage. \n";
+			}
 	}
-	else if (userSpell == "Arms-of-Hadar")
+	else if (userSpell == "ARMS-OF-HADAR")
 	{
 			roll(6, 2);
 		if (saveThrow(spellDC, StrMod) != 1)
 			damage = damage / 2;
+		if (damage == 0)
+			cout << "You missed! \n";
+		else
+		{
+			cout << "You rolled a " << damage << " damage. \n";
+		}
 	}
-	else if (userSpell == "Burning-Hands")
+	else if (userSpell == "BURNING-HANDS")
 	{
 			roll(6, 3);
 		if (saveThrow(spellDC, DexMod) != 1)
-			damage = damage / 2;
+			damage = damage / 2; if (damage == 0)
+			cout << "You missed! \n";
+			else
+			{
+				cout << "You rolled a " << damage << " damage. \n";
+			}
 	}
-	else if (userSpell == "Charm-Person")
+	else if (userSpell == "CHARM-PERSON")
 	{
 		if (saveThrow(spellDC, WisMod) != 1)
 		{
@@ -1119,69 +1263,105 @@ int SpellsCharacter()
 		else
 			cout << "You manage to be aware of the handsome Millhouse Manastorm... but not handsome enough! \n"; //Flavor Text (Save Throw)
 	}
-	else if (userSpell == "Chromatic-Orb")
+	else if (userSpell == "CHROMATIC-ORB")
 	{
 		acCheck();
 		if (spellAttackRoll > millhouseArmorClass)
-			roll(8, 3);
+			roll(8, 3); if (damage == 0)
+			cout << "You missed! \n";
+			else
+			{
+				cout << "You rolled a " << damage << " damage. \n";
+			}
 	}
-	else if (userSpell == "Cure-Wounds")
+	else if (userSpell == "CURE-WOUNDS")
 	{
 			healingRoll(8, 1);
 			heal = heal + 4;
 			characterHP = characterHP + heal;
 	}
-	else if (userSpell == "Dissonant-Whispers")
+	else if (userSpell == "DISSONANT-WHISPERS")
 	{
 		if (saveThrow(spellDC, WisMod) != 1)
-			roll(6, 3);
+			roll(6, 3); if (damage == 0)
+			cout << "You missed! \n";
+			else
+			{
+				cout << "You rolled a " << damage << " damage. \n";
+			}
 	}
-	else if (userSpell == "False-Life")
+	else if (userSpell == "FALSE-LIFE")
 	{
 		healingRoll(4, 1);
 		heal = heal + 4;
 		characterHP = characterHP + heal;
 	}
-	else if (userSpell == "Healing-Word")
+	else if (userSpell == "HEALING-WORD")
 	{
 		healingRoll(4, 1);
 			heal = heal + spellAttack;
 		characterHP = characterHP + heal;
 	}
-	else if (userSpell == "Hellish-Rebuke")
+	else if (userSpell == "HELLISH-REBUKE")
 	{
 			roll(6, 1);
 			if (saveThrow(spellDC, DexMod) != 1)
-				damage = damage / 2;
+				damage = damage / 2; if (damage == 0)
+				cout << "You missed! \n";
+				else
+				{
+					cout << "You rolled a " << damage << " damage. \n";
+				}
 	}
-	else if (userSpell == "Hex")
+	else if (userSpell == "HEX")
 	{
 		acCheck();
 		if (spellAttackRoll > millhouseArmorClass)
-			roll(6, 1);
+			roll(6, 1); if (damage == 0)
+			cout << "You missed! \n";
+			else
+			{
+				cout << "You rolled a " << damage << " damage. \n";
+			}
 	}
-	else if (userSpell == "Inflict-Wounds")
+	else if (userSpell == "INFLICT-WOUNDS")
 	{
 		acCheck();
 		if (spellAttackRoll > millhouseArmorClass)
-			roll(10, 3);
+			roll(10, 3); if (damage == 0)
+			cout << "You missed! \n";
+			else
+			{
+				cout << "You rolled a " << damage << " damage. \n";
+			}
 	}
-	else if (userSpell == "Mage-Armor")
+	else if (userSpell == "MAGE-ARMOR")
 	{
 		armorClass = 13 + DexMod;
 	}
-	else if (userSpell == "Magic-Missile")
+	else if (userSpell == "MAGIC-MISSILE")
 	{
 			roll(4, 3);
 			damage = damage + 3;
+			if (damage == 0)
+				cout << "You missed! \n";
+			else
+			{
+				cout << "You rolled a " << damage << " damage. \n";
+			}
 	}
-	else if (userSpell == "Ray-of-Sickness")
+	else if (userSpell == "RAY-OF-SICKNESS")
 	{
 		acCheck();
 		if (spellAttackRoll > millhouseArmorClass)
-			roll(8, 2);
+			roll(8, 2); if (damage == 0)
+			cout << "You missed! \n";
+			else
+			{
+				cout << "You rolled a " << damage << " damage. \n";
+			}
 	}
-	else if (userSpell == "Tasha's-Hideous-Laughter")
+	else if (userSpell == "TASHA'S-HIDIOUS-LAUGHTER")
 	{
 		cout << "Millhouse begins to laugh uncontrollably." << endl;
 		Sleep(2001);
@@ -1189,23 +1369,34 @@ int SpellsCharacter()
 		Sleep(2001);
 		cout << "Millhouse ends laughing uncontrollably." << endl;
 	}
-	else if (userSpell == "Lay-on-Hands" && LayOnHands != 1)
+	else if (userSpell == "LAY-ON-HANDS" && LayOnHands != 1)
 	{
 		characterHP = characterHP + 5;
 		LayOnHands++;
 		
 	}
-	else if (userSpell == "Thunderwave")
+	else if (userSpell == "THUNDERWAVE")
 	{
 			roll(8, 2);
 			if (saveThrow(spellDC, ConMod) != 1)
 				damage = damage / 2;
+			if (damage == 0)
+				cout << "You missed! \n";
+			else
+			{
+				cout << "You rolled a " << damage << " damage. \n";
+			}
 	}
-	else if (userSpell == "Witch-Bolt")
+	else if (userSpell == "WITCH-BOLT")
 	{
 		acCheck();
 		if (spellAttackRoll > millhouseArmorClass)
-			roll(12, 1);
+			roll(12, 1); if (damage == 0)
+			cout << "You missed! \n";
+			else
+			{
+				cout << "You rolled a " << damage << " damage. \n";
+			}
 	}
 	else
 	{
@@ -1218,77 +1409,160 @@ int SpellsCharacter()
 
 int main()
 {
-	system("color 5E");
-	int userInput;
+	MillhouseManastormHP = 8;
 	string userInputString;
-	System::Console::WindowLeft;
-	System::Console::WindowTop;
-	int width = System::Console::LargestWindowWidth - 25;
-	int height = System::Console::LargestWindowHeight - 8;
-	System::Console::SetWindowSize(width, height);
-	characterSelection();
-	characterHP = health;
+	do{
+		system("color 5E");
+		int userInput;
+	
+		System::Console::WindowLeft;
+		System::Console::WindowTop;
+		int width = System::Console::LargestWindowWidth - 25;
+		int height = System::Console::LargestWindowHeight - 8;
+		System::Console::SetWindowSize(width, height);
+		characterSelection();
+		characterHP = health;
 
-	do
-	{
-		if (MillhouseManastormHP <= 2)	//If HP <= 2, run away and heal
+		do
 		{
-			//Expeditious Retreat
-			cout << "Millhouse runs away 75ft/s for 10 minutes. \n Millhouse being " << 75 * 60 * 60 << " feet away, heals to maximum and you spend 30 minutes catching up to him!" << endl;
-			MillhouseManastormHP = 8;
-			Sleep(1000 * 4);
-		}
-		else if (MillhouseManastormHP > 2 && MillhouseManastormHP <= 4)	//If HP is between 3 and 4 cast healing spells.
-		{	//Healing Spells
-			healingSpells();
-		}
-		else	//Cast damaging spells when HP is not below 4
-		{
+			if (MillhouseManastormHP <= 2)	//If HP <= 2, run away and heal
+			{
+				//Expeditious Retreat
+				cout << "Millhouse runs away 75ft/s for 10 minutes. \n Millhouse being " << 75 * 60 * 60 << " feet away, heals to maximum and you spend 30 minutes catching up to him!" << endl;
+				MillhouseManastormHP = 8;
+				Sleep(1000 * 4);
+			}
+			else if (MillhouseManastormHP > 2 && MillhouseManastormHP <= 4)	//If HP is between 3 and 4 cast healing spells.
+			{	//Healing Spells
+				healingSpells();
+			}
+			else	//Cast damaging spells when HP is not below 4
+			{
+
+				castDmgSpell();	//Cast DMG Spells
+				if (damage == 0)
+					cout << "Millhouse missed! \n";
+				else
+				{
+					cout << "Millhouse rolled a " << damage << " damage. \n";
+				}
+				characterHP = characterHP - damage;	// Apply damage
+				cout << "Your current HP is: " << characterHP << ". \n";	//Display HP
+				if (characterHP <= 0)	//Escape loop
+					goto GetOut;	//You got killed by Millhouse!
+			}
+		userInputError:
 			
-			castDmgSpell();	//Cast DMG Spells
-			characterHP = characterHP - damage;	// Apply damage
-			cout << "Your current HP is: " << characterHP << ". \n";	//Display HP
-			if (characterHP <= 0)	//Escape loop
-				goto GetOut;	//You got killed by Millhouse!
-		}
-	userInputError:
-		cout << "What would you like to do? Attack (1), or Cast a Spell(2)\n";
-		cin >> userInput;
-		if (userInput == 1)
-		{
+			cout << "What would you like to do? Attack (1), Cast a Spell(2), or Display Stats (3)\n";
+			cin >> userInput;
+			if (userInput == 1)
+			{
+				damage = 0;
+				attack();
+			}
+			else if (userInput == 2)
+			{
+				damage = 0;
+				SpellsCharacter();
+			}
+			else if (userInput == 3)
+			{
+				displayStats();
+				goto userInputError;
+			}
+			else
+			{
+				cout << "Please select a given option integer (1, 2, or 3)" << endl;
+				goto userInputError;
+			}
+			cout << "You rolled a " << damage << " damage. \n";
+			MillhouseManastormHP = MillhouseManastormHP - damage;
+			cout << "Millhouse HP = " << MillhouseManastormHP << endl;
+			userInput = 0;
 			damage = 0;
-			attack();
-		}
-		else if (userInput == 2)
+		} while (MillhouseManastormHP > 0);	//While Millhouse is alive, cast spells
+		Sleep(1000);
+		cout << "You have defeated the great and glorious Millhouse Manastorm! \n After murdering the great wizard, the town guards attempt to execute you. \n";	//Millhouse dies
+	
+	
+		do
 		{
-			damage = 0;
-			SpellsCharacter();
-		}
-		else
-		{
-		cout << "Please select a given option integer (1, or 2)" << endl;
-		goto userInputError;
-		}
-		MillhouseManastormHP = MillhouseManastormHP - damage;
-		cout << "Millhouse HP = " << MillhouseManastormHP << endl;
-		userInput = 0;
-		damage = 0;
-	} while (MillhouseManastormHP > 0);	//While Millhouse is alive, cast spells
-	Sleep(1000);
-	cout << "You have defeated the great and glorious Millhouse Manastorm! \n After murdering the great wizard, the town guards execute you. \n";	//Millhouse dies
-GetOut:	//Millhouse Manastorm wins
+			if (guardhealth <= 6)	//If HP <= 6, drink OP health potion and heal
+			{
+				cout << "The guard pulls out a mystical red apple from his pouch, and takes a bite from it, as you see his wounds fade away." << endl;
+				guardhealth = 14;
+				Sleep(1000 * 4);
+			}
+			
+			else	//Cast damaging spells when HP is not below 4
+			{
 
-	if (characterHP <= 0)	//If character dies
-	{
-		cout << "You have been defeated by the great, glorious, and victorious Millhouse Manastorm! Long live the sorcerer! Long live the foolish! \n";	//Millhouse win statement
-	}
-	Sleep(3000);
-	system("color 4C");
-	cout << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl << " You Died " << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl;
+				roll(12, 1);
+				if (damage == 0)
+					cout << "The guard missed! \n";
+				else
+				{
+					cout << "The guard rolled a " << damage << " damage. \n";
+				}
+				characterHP = characterHP - damage;	// Apply damage
+				cout << "Your current HP is: " << characterHP << ". \n";	//Display HP
+				if (characterHP <= 0)	//Escape loop
+					goto GetOut;	//You got killed by Millhouse!
+			}
+		userInputError2:
+			cout << "What would you like to do? Attack (1), Cast a Spell(2), or Display Stats (3)\n";
+			cin >> userInput;
+			if (userInput == 1)
+			{
+				damage = 0;
+				attack();
+			}
+			else if (userInput == 2)
+			{
+				damage = 0;
+				SpellsCharacter();
+			}
+			else if (userInput == 3)
+			{
+				displayStats();
+				goto userInputError2;
+			}
+			else
+			{
+				cout << "Please select a given option integer (1, 2, or 3)" << endl;
+				goto userInputError2;
+			}
+			guardhealth = guardhealth - damage;
+			cout << "GuardHP = " << guardhealth << endl;
+			userInput = 0;
+			damage = 0;
+		} while (guardhealth > 0);	//While Millhouse is alive, cast spells
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	GetOut:	//Millhouse Manastorm wins
+
+		if (characterHP <= 0)	//If character dies
+		{
+			cout << "You have been defeated by the great, glorious, and victorious Millhouse Manastorm! Long live the sorcerer! Long live the foolish! \n";	//Millhouse win statement
+		}
+		Sleep(3000);
+		system("color 4C");
+		cout << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl << " You Died " << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl;
+		cout << "Would you like to try again? \n";
+		cin >> userInputString;
+		for (auto&c : userInputString) c = toupper(c);
+	} while (userInputString == "YES");
 	system("pause");	//Conclusion
 	return 0;	//Conclusion
 }
 
 //Hey, Author's note:
 //It works. Unlike some other peoples >.> 
-// ¯\_(ツ)_/¯
+// ¯\_(ツ)_/¯-
