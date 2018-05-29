@@ -1,5 +1,8 @@
 # Final-Project (DnD Millhouse Manastorm)
 >Millhouse Manastorm is doing bad things, and you pick a brave level 1 homie to ruin his day.
+
+## Flow Chart
+
 ## Install
 
 Download repository and run the application.
@@ -7,6 +10,8 @@ Download repository and run the application.
 ## Usage
 
 After repository is downloaded, run the application in visual studio, then run the debugger by clicking the green arrow at the top.
+
+## Video
 
 ## Contribute
 
