@@ -742,6 +742,29 @@ int characterSelection()
 	system("Pause");
 	return(0);
 }
+void displayStats()
+{
+	cout << "Your stats are: \n";
+	cout << "Health: " << health << endl;
+	cout << "Speed: " << speed << endl;
+	cout << "Hit Dice: " << hitDice << endl;
+	cout << "Armor Class: " << armorClass << endl;
+	cout << "Proficiency: " << proficiency << endl;
+	cout << "Strength: " << StrScore << endl;
+	cout << "Strength Mod: " << StrMod << endl;
+	cout << "Dexterity: " << DexScore << endl;
+	cout << "Dexterity Mod: " << DexMod << endl;
+	cout << "Constitution: " << ConScore << endl;
+	cout << "Constitution Mod: " << ConMod << endl;
+	cout << "Constitution: " << ConScore << endl;
+	cout << "Constitution Mod: " << ConMod << endl;
+	cout << "Intelligence:" << IntScore << endl;
+	cout << "Intelligence Mod: " << IntMod << endl;
+	cout << "Wisdom: " << WisScore << endl;
+	cout << "Wisdom Mod: " << WisMod << endl;
+	cout << "Charisma: " << ChaScore << endl;
+	cout << "Charisma Mod: " << ChaMod << endl;
+}
 int roll(int x, int y) //Rolls the damage values of a spell
 {
 	/*
@@ -1429,7 +1452,8 @@ int main()
 					goto GetOut;	//You got killed by Millhouse!
 			}
 		userInputError:
-			cout << "What would you like to do? Attack (1), or Cast a Spell(2)\n";
+			
+			cout << "What would you like to do? Attack (1), Cast a Spell(2), or Display Stats (3)\n";
 			cin >> userInput;
 			if (userInput == 1)
 			{
@@ -1441,9 +1465,14 @@ int main()
 				damage = 0;
 				SpellsCharacter();
 			}
+			else if (userInput == 3)
+			{
+				displayStats();
+				goto userInputError;
+			}
 			else
 			{
-				cout << "Please select a given option integer (1, or 2)" << endl;
+				cout << "Please select a given option integer (1, 2, or 3)" << endl;
 				goto userInputError;
 			}
 			cout << "You rolled a " << damage << " damage. \n";
@@ -1481,7 +1510,7 @@ int main()
 					goto GetOut;	//You got killed by Millhouse!
 			}
 		userInputError2:
-			cout << "What would you like to do? Attack (1), or Cast a Spell(2)\n";
+			cout << "What would you like to do? Attack (1), Cast a Spell(2), or Display Stats (3)\n";
 			cin >> userInput;
 			if (userInput == 1)
 			{
@@ -1493,9 +1522,14 @@ int main()
 				damage = 0;
 				SpellsCharacter();
 			}
+			else if (userInput == 3)
+			{
+				displayStats();
+				goto userInputError2;
+			}
 			else
 			{
-				cout << "Please select a given option integer (1, or 2)" << endl;
+				cout << "Please select a given option integer (1, 2, or 3)" << endl;
 				goto userInputError2;
 			}
 			guardhealth = guardhealth - damage;
